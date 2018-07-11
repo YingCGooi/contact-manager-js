@@ -24,23 +24,24 @@ Template = {
 		$('.contacts_list ul').html(contactsHTML);
 	},
 
-	renderToggleTags() {
-		const toggleTagsHTML = this.tag_fields({ fields: TAGS });
-		$('ul.toggle_tags').html(toggleTagsHTML);
-	},
-
 	renderNoContacts(query) {
 		const messageHTML = this.no_contacts({ query: query });
 		$('.contacts_list ul').html(messageHTML);
+	},	
+
+	renderToggleTags() {
+		const toggleTagsHTML = this.tag_fields({ fields: TAGS });
+		$('ul#toggle_tags').html(toggleTagsHTML);
+		$('ul#input_tags').html(toggleTagsHTML);
 	},
 }
 
 App = {
 	init() {
-		this.selectedTags = this.updateSelectedTags();
+		this.selectedTags = TAGS;
 		this.queryInput = '';
 
-		$.getJSON(CONTACTS_PATH, json => {
+		$.get(CONTACTS_PATH, json => {
 			Contacts.all = json;
 			Template.renderContacts(json);
 		});
@@ -50,26 +51,27 @@ App = {
 	},
 
 	bindEvents() {
-		$('ul.toggle_tags').on('change', 'input', this.filterByTags.bind(this));
+		$('ul#toggle_tags').on('change', 'input', this.filterByTags.bind(this));
 		$('#searchbar').on('input', debounce(this.filterByInputName.bind(this), 300));
+		$('#add').on('click', this.displayContactForm.bind(this));
 	},
 
 	updateSelectedTags() {
-		const checkedInputs = $('.toggle_tags input:checked');
+		const checkedInputs = $('#toggle_tags input:checked');
 		this.selectedTags = $.map(checkedInputs, input => input.value);
 	},
 
 	filterByTags() {
 		this.updateSelectedTags();
-		this.renderFilteredContacts();
+		this.renderContactsSection();
 	},
 
 	filterByInputName() {
 		this.queryInput = $('#searchbar').val();
-		this.renderFilteredContacts();
+		this.renderContactsSection();
 	},	
 
-	renderFilteredContacts() {
+	renderContactsSection() {
 		const filteredContacts = Contacts.filtered();
 
 		if (filteredContacts.length > 0) {
@@ -78,12 +80,15 @@ App = {
 			Template.renderNoContacts(this.queryInput);
 		}
 	},
+
+	displayContactForm() {
+		$('.contacts_list, .menu').hide();		
+		$('.contact_form').fadeIn();
+	},
 }
 
 Contacts = {
-	init() {
-		this.all = null;
-	},
+	all: null,
 
 	filtered() {
 		return this.all.filter(obj => {
@@ -103,6 +108,5 @@ Contacts = {
 },
 
 Template.init();
-Contacts.init();
 App.init();
 });
