@@ -24,31 +24,45 @@
 			<button id="add">Add Contact</button>
 			<input id="searchbar" type="text" placeholder="search by name" />
 			<span>Filter by:</span>
-			<ul class="toggle_tags"></ul>
+			<ul id="toggle_tags"></ul>
 		</section>
 
 		<section class="contacts_list">
 			<ul class="flex-container"></ul>
 		</section>
 
-		<section class="new">
-			<h2>Create Contact</h2>
-			<form method="post" action="/api/contacts/" novalidate>
-				<dl>
+		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
+			<fieldset>
+				<h2>Create Contact</h2>					
+				<dl class="invalid">
 					<dt><label for="name">Full name:</label></dt>
-					<dd><input id="name" type="text" name="full_name" /></dd>
-
-					<dt><label for="email">Email address:</label></dt>
-					<dd><input id="email" type="text" name="email" /></dd>
-
-					<dt><label for="phone">Telephone number:</label></dt>
-					<dd><input id="phone" type="text" name="phone_number" /></dd>
-
-					<dt><label for="tags">Tags:</label></dt>
-					<dd></dd>
+					<dd><input id="name" type="text" name="full_name" required/></dd>
 				</dl>
-			</form>
-		</section>
+
+				<dl>
+					<dt><label for="email">Email address:</label></dt>
+					<dd><input id="email" type="text" name="email" required /></dd>
+				</dl>
+
+				<dl>
+					<dt><label for="phone">Telephone number:</label></dt>
+					<dd><input id="phone" type="text" name="phone_number" required /></dd>
+				</dl>
+
+				<dl>
+					<dt>Select Tags:</dt>
+					<dd><ul id="input_tags"></ul></dd>
+				</dl>
+
+				<dl>
+					<dt></dt>
+					<dd class="submit">
+						<button type="submit">Create</button></li>
+						<button type="button">Cancel</button></li>
+					</dd>
+				</dl>
+			</fieldset>
+		</form>
 	</main>
 
 	<footer>
@@ -56,7 +70,7 @@
 		<small>By Ying Chyi Gooi</small>
 	</footer>
 
-	<script id="tag_fields" type="text/x-handlebars">
+	<script id="tag_fields" class="partial" type="text/x-handlebars">
 		{{#each fields}}
 		<li>
 			<label>
