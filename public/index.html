@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Contact Manager</title>
+  <link rel="stylesheet" href="/stylesheets/reset.css" />
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">  
+	<link rel="stylesheet" href="/stylesheets/main.css" />
+	<script src="/javascripts/debounce.js"></script>
+  <script src="/javascripts/jquery.js"></script>
+  <script src="/javascripts/handlebars.js"></script>
+  <script src="/javascripts/application.js"></script>  
+</head>
+<body>
+	<header class="flex-container">
+		<h1>Contact Manager</h1>
+		<p>Using jQuery and Handlebars</p>
+	</header>
+
+	<main>
+		<section class="menu flex-container">
+			<button id="add">Add Contact</button>
+			<input id="searchbar" type="text" placeholder="search by name" />
+			<span>Filter by:</span>
+			<ul class="toggle_tags"></ul>
+		</section>
+
+		<section class="contacts_list">
+			<ul class="flex-container"></ul>
+		</section>
+	</main>
+
+	<footer>
+		<div class="upper-border"></div>
+		<small>By Ying Chyi Gooi</small>
+	</footer>
+
+	<script id="tag_fields" type="text/x-handlebars">
+		{{#each fields}}
+		<li>
+			<label>
+				<input type="checkbox" name="field" value="{{.}}" checked />{{.}}
+			</label>
+		</li>
+		{{/each}}
+	</script>
+
+	<script id="contacts" type="text/x-handlebars">
+		{{#each contacts}}
+		<li>
+			<h2>{{full_name}}</h2>
+			<dl>
+				<dt>Phone Number</dt>
+				<dd>{{phone_number}}</dd>
+
+				<dt>Email</dt>
+				<dd>{{email}}</dd>
+
+				{{#if tags}}
+				<dt>Tags</dt>
+				<dd>{{tags}}</dd>
+				{{/if}}
+			</dl>
+
+			<button class="edit" data-id={{id}}>Edit</button>
+			<button class="delete" data-id={{id}}>Delete</button>
+		</li>
+		{{/each}}
+	</script>
+
+	<script id="no_contacts" type="text/x-handlebars">
+		<li class="message">
+			<p>There are no contacts starting with <strong>{{query}}</strong>.</p>
+		</li>
+	</script>
+</body>
+
+</html>
