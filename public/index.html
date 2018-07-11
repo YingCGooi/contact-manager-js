@@ -30,6 +30,25 @@
 		<section class="contacts_list">
 			<ul class="flex-container"></ul>
 		</section>
+
+		<section class="new">
+			<h2>Create Contact</h2>
+			<form method="post" action="/api/contacts/" novalidate>
+				<dl>
+					<dt><label for="name">Full name:</label></dt>
+					<dd><input id="name" type="text" name="full_name" /></dd>
+
+					<dt><label for="email">Email address:</label></dt>
+					<dd><input id="email" type="text" name="email" /></dd>
+
+					<dt><label for="phone">Telephone number:</label></dt>
+					<dd><input id="phone" type="text" name="phone_number" /></dd>
+
+					<dt><label for="tags">Tags:</label></dt>
+					<dd></dd>
+				</dl>
+			</form>
+		</section>
 	</main>
 
 	<footer>
@@ -72,7 +91,7 @@
 
 	<script id="no_contacts" type="text/x-handlebars">
 		<li class="message">
-			<p>There are no contacts starting with <strong>{{query}}</strong>.</p>
+			<p>There are no contacts with the selected tags starting with <strong>{{query}}</strong>.</p>
 		</li>
 	</script>
 </body>
