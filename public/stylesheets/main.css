@@ -15,6 +15,21 @@ body {
 	justify-content: space-evenly;	
 }
 
+button {
+	margin-top: 12px;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	color: #FFF;
+	background: #6A5C9D;
+}
+
+button:hover {
+	cursor: pointer;
+	background: #8074AB;
+}
+
 /*============
 		Header 
 ============*/
@@ -37,6 +52,7 @@ header p {
 		 Menu 
 ============*/
 .menu {
+	position: relative;
 	padding: 30px;
 	background: #EAE8F1;
 }
@@ -91,6 +107,11 @@ header p {
 
 .contacts_list li {
 	margin-bottom: 20px;
+	width: 160px;
+}
+
+.contacts_list button {
+	width: 46%;
 }
 
 dt {
@@ -105,22 +126,6 @@ dd {
 	font-weight: 300;	
 }
 
-button {
-	margin-top: 12px;
-	padding: 8px;
-	width: 45%;
-	border: none;
-	border-radius: 4px;
-	font-size: 14px;
-	color: #FFF;
-	background: #6A5C9D;
-}
-
-button:hover {
-	cursor: pointer;
-	background: #8074AB;
-}
-
 li.message {
 	font-size: 20px;
 	padding: 20px;
@@ -131,7 +136,70 @@ li.message {
 strong {
 	font-weight: bold;
 }
+/*=================
+		Contact Form 
+=================*/
+.contact_form {
+	/*display: none;*/
+	margin: 30px;
+}
 
+.contact_form h2 {
+	padding-bottom: 20px;
+	font-size: 26px;
+	text-align: center;
+	border-bottom: 1px solid #DDD;
+}
+
+.contact_form dl {
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	margin: 10px 0;
+}
+
+.contact_form dt {
+	margin: 0;
+	padding-right: 15px;
+	width: 175px;
+	text-align: right;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.contact_form dd {
+	flex: 1;
+	margin-right: 30px;
+}
+
+.contact_form input[type=text] {
+	padding: 5px;
+	width: 100%;
+	font-size: 18px;
+	border: 1px solid #BBB;
+	border-radius: 3px;
+}
+
+.submit {
+	display: flex;
+	justify-content: space-between;
+}
+
+.submit button {
+	margin: 0;
+	padding: 10px;
+	width: 48%;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.invalid label {
+	color: #D85D5D;
+}
+
+.invalid input[type=text] {
+	border: 1px solid #D85D5D;
+};
 /*============
 		Footer 
 ============*/
