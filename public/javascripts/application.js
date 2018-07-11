@@ -37,7 +37,7 @@ Template = {
 
 App = {
 	init() {
-		this.selectedTags = null;
+		this.selectedTags = this.updateSelectedTags();
 		this.queryInput = '';
 
 		$.getJSON(CONTACTS_PATH, json => {
@@ -54,35 +54,29 @@ App = {
 		$('#searchbar').on('input', debounce(this.filterByInputName.bind(this), 300));
 	},
 
-	filterByTags() {
+	updateSelectedTags() {
 		const checkedInputs = $('.toggle_tags input:checked');
 		this.selectedTags = $.map(checkedInputs, input => input.value);
-		const filteredContacts = this.selectContactsByTags(selectedTags);
-		Template.renderContacts(filteredContacts);
 	},
 
-	selectContactsByTags(selectedTags) {
- 		return this.contacts.filter(obj => {
-			const tags = obj.tags || 'not-tagged';
-			return tags.split(',').every(tag => selectedTags.includes(tag));			
-		});
+	filterByTags() {
+		this.updateSelectedTags();
+		this.renderFilteredContacts();
 	},
 
-	filterByInputName(event) {
-		const query = event.target.value;
-		event.preventDefault();
-		const filteredContacts = this.selectContactsByName(query);
+	filterByInputName() {
+		this.queryInput = $('#searchbar').val();
+		this.renderFilteredContacts();
+	},	
+
+	renderFilteredContacts() {
+		const filteredContacts = Contacts.filtered();
 
 		if (filteredContacts.length > 0) {
 			Template.renderContacts(filteredContacts);
 		} else {
-			Template.renderNoContacts(query);
+			Template.renderNoContacts(this.queryInput);
 		}
-	},
-
-	selectContactsByName(query) {
-		const regexStartWithQuery = new RegExp('^' + query, 'i');
-		return this.contacts.filter(obj => obj.full_name.match(regexStartWithQuery));
 	},
 }
 
@@ -91,30 +85,19 @@ Contacts = {
 		this.all = null;
 	},
 
-	selectByTags() {
-		const checkedInputs = $('.toggle_tags input:checked');
-		this.tagsChecked = $.map(checkedInputs, input => input.value);
-		return this.filterContacts();
-	},
-
-	selectByInputName() {
-		this.queryInput = $('#searchbar').val();
-		return this.filterContacts();
-	},
-
-	filterContacts() {
+	filtered() {
 		return this.all.filter(obj => {
-			return matchTags(obj) && matchQuery(obj)
+			return this.matchTags(obj) && this.matchQuery(obj)
 		});
 	},
 
 	matchTags(obj) {
 		const tags = obj.tags || 'not-tagged';
-		return tags.split(',').every(tag => this.tagsChecked.includes(tag));
+		return tags.split(',').every(tag => App.selectedTags.includes(tag));
 	},
 
 	matchQuery(obj) {
-		const regexStartWithQuery = new RegExp('^' + this.queryInput, 'i');
+		const regexStartWithQuery = new RegExp('^' + App.queryInput, 'i');
 		return obj.full_name.match(regexStartWithQuery);
 	},
 },
