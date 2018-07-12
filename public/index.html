@@ -28,12 +28,12 @@
 		</section>
 
 		<section class="contacts_list">
-			<ul class="flex-container"></ul>
+			<ul></ul>
 		</section>
 
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
 			<fieldset>
-				<h2>Create Contact</h2>					
+				<h2>Create New Contact</h2>					
 				<dl>
 					<dt><label for="name">Full name:</label></dt>
 					<dd>
@@ -82,7 +82,7 @@
 		{{#each fields}}
 		<li>
 			<label>
-				<input type="checkbox" name="field" value="{{.}}" checked />{{.}}
+				<input type="checkbox" name="tags" value="{{.}}" checked />{{.}}
 			</label>
 		</li>
 		{{/each}}
@@ -99,9 +99,11 @@
 				<dt>Email</dt>
 				<dd>{{email}}</dd>
 
-				{{#if tags}}
 				<dt>Tags</dt>
+				{{#if tags}}
 				<dd>{{tags}}</dd>
+				{{else}}
+				<dd>not tagged</dd>
 				{{/if}}
 			</dl>
 
