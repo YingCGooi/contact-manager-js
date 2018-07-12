@@ -63,11 +63,12 @@ App = {
 		$('#add').on('click', this.displayContactForm);
 		$('button.cancel').on('click', this.hideContactForm);
 		$('.contact_form').on('blur', 'dd > input', this.validateInputs);
+		$('.contact_form').on('submit', this.saveNewContact);
 	},
 
 	updateSelectedTags() {
-		const checkedInputs = $('#toggle_tags input:checked');
-		this.selectedTags = $.map(checkedInputs, input => input.value);
+		const $checkedInputs = $('#toggle_tags input:checked');
+		this.selectedTags = $.map($checkedInputs, input => input.value);
 	},
 
 	filterByTags() {
@@ -93,30 +94,66 @@ App = {
 	displayContactForm() {
 		$('.contacts_list, .menu').hide();		
 		$('.contact_form').fadeIn();
-		$('.contact_form input[type=checkbox]').prop('checked', false);
+		$('.contact_form [type=checkbox]').prop('checked', false);
+		$('.contact_form [value=not-tagged]').closest('li').remove();
 	},
 
 	validateInputs(event) {
 		const input = event.target;
-		const isValid = input.checkValidity();
-		const $dl = $(input).closest('dl').removeClass('invalid');
-		const $small = $(input).next();		
+		const $dl = $(input).closest('dl');
+		const invalidText = `*a valid ${input.id} is required`;
 
-		if (isValid) {
-			$small.html('');
+		if (input.checkValidity()) {
+			this.resetInvalidityPrompts($dl);
 		} else { 
 			$dl.addClass('invalid');
-			$small.html(`*a valid ${input.id} is required`);
+			$dl.find('small').html(invalidText);
 		}
 	},
 
-	hideContactForm() {
+	resetInvalidityPrompts($elem = $('.contact_form dl')) {
+		$elem.removeClass('invalid');
+		$elem.find('small').html('');
+	},
 
+	hideContactForm(event) {
+		event.preventDefault();
+		this.resetInvalidityPrompts();
+		$('.contact_form').hide();
+		$('.contacts_list, .menu').fadeIn();	
+	},
+
+	saveNewContact(event) {
+		event.preventDefault();
+		const form = event.target;
+		const data = this.formatFormData(form);
+
+		if (form.checkValidity()) $.post(CONTACTS_PATH, data, 'json');
+		Contacts.reload().then(() => Template.renderContacts(Contacts.all));
+
+		this.hideContactForm(event);
+		form.reset();
+	},
+
+	formatFormData(form) {
+		const $checkedInputs = $(form).find('input:checked');
+		const selectedTags = $.map($checkedInputs, input => input.value);
+
+		return {
+			full_name: form.name.value,
+			email: form.email.value,
+			phone_number: form.phone_number.value,
+			tags: selectedTags.join(','),
+		}
 	},
 }
 
 Contacts = {
 	all: null,
+
+	reload() {
+		return $.get(CONTACTS_PATH, json => this.all = json);
+	},
 
 	filtered() {
 		return this.all.filter(obj => {
