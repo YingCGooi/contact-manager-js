@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Contact Manager</title>
   <link rel="stylesheet" href="/stylesheets/reset.css" />
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">  
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
 	<link rel="stylesheet" href="/stylesheets/main.css" />
 	<script src="/javascripts/underscore.js"></script>
   <script src="/javascripts/jquery.js"></script>
@@ -22,9 +22,11 @@
 	<main>
 		<section class="menu flex-container">
 			<button id="add">Add Contact</button>
-			<input id="searchbar" type="text" placeholder="search by name" />
-			<span>Filter by:</span>
-			<ul id="toggle_tags"></ul>
+			<input id="searchbar" type="text" placeholder="&#128269 search by name" />
+			<div class="wrap">
+				<span>Filter by:</span>
+				<ul id="toggle_tags"></ul>
+			</div>
 		</section>
 
 		<section class="contacts_list">
@@ -33,7 +35,7 @@
 
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
 			<fieldset>
-				<h2>Create New Contact</h2>					
+				<h2><!-- Add or edit new contact --></h2>
 				<dl>
 					<dt><label for="name">Full name:</label></dt>
 					<dd>
@@ -57,7 +59,7 @@
 					</dd>
 				</dl>
 
-				<dl>
+				<dl class="tags">
 					<dt>Select Tags:</dt>
 					<dd><ul id="input_tags"></ul></dd>
 				</dl>
@@ -65,8 +67,9 @@
 				<dl>
 					<dt></dt>
 					<dd class="submit">
-						<button type="submit">Create</button></li>
-						<button class="cancel">Cancel</button></li>
+						<button id="update" data-id="" type="submit">Update</button>
+						<button id="create" type="submit">Create</button>
+						<button type="button" class="cancel">Cancel</button>
 					</dd>
 				</dl>
 			</fieldset>
@@ -82,7 +85,7 @@
 		{{#each fields}}
 		<li>
 			<label>
-				<input type="checkbox" name="tags" value="{{.}}" checked />{{.}}
+				<input type="checkbox" name="tags" value="{{.}}" />{{.}}
 			</label>
 		</li>
 		{{/each}}
@@ -107,15 +110,19 @@
 				{{/if}}
 			</dl>
 
-			<button class="edit" data-id={{id}}>Edit</button>
-			<button class="delete" data-id={{id}}>Delete</button>
+			<button type="button" class="edit" data-id={{id}}>Edit</button>
+			<button type="button" class="delete" data-id={{id}} data-name={{full_name}}>Delete</button>
 		</li>
 		{{/each}}
 	</script>
 
 	<script id="no_contacts" type="text/x-handlebars">
 		<li class="message">
+			{{#if query}}
 			<p>There are no contacts with the selected tags starting with <strong>{{query}}</strong>.</p>
+			{{else}}
+			<p>No contacts found with the selected tags.</p>
+			{{/if}}
 		</li>
 	</script>
 </body>
