@@ -3,7 +3,7 @@ var App;
 var Contacts;
 
 $(function() {
-const CONTACTS_PATH = '/api/contacts';
+const API_PATH = '/api/contacts';
 const TAGS = ['work', 'friend', 'family', 'not-tagged'];
 
 Template = {
@@ -32,6 +32,7 @@ Template = {
 	renderToggleTags() {
 		const toggleTagsHTML = this.tag_fields({ fields: TAGS });
 		$('ul#toggle_tags').html(toggleTagsHTML);
+		$('ul#toggle_tags input:checkbox').prop('checked', true);		
 		$('ul#input_tags').html(toggleTagsHTML);
 	},
 }
@@ -41,13 +42,13 @@ App = {
 		this.selectedTags = TAGS;
 		this.queryInput = '';
 
-		$.get(CONTACTS_PATH, json => {
-			Contacts.all = json;
-			Template.renderContacts(json);
-		});
-
+		this.reloadAndRenderContacts();
 		Template.renderToggleTags();
 		this.bindEvents();
+	},
+
+	reloadAndRenderContacts() {
+		Contacts.reload().done(() => Template.renderContacts(Contacts.all));
 	},
 
 	bindAllMethods() {
@@ -60,10 +61,12 @@ App = {
 		this.bindAllMethods();
 		$('ul#toggle_tags').on('change', 'input', this.filterByTags);
 		$('#searchbar').on('input', _.debounce(this.filterByInputName, 300));
-		$('#add').on('click', this.displayContactForm);
+		$('button#add').on('click', this.displayNewContactForm);
 		$('button.cancel').on('click', this.hideContactForm);
 		$('.contact_form').on('blur', 'dd > input', this.validateInputs);
-		$('.contact_form').on('submit', this.saveNewContact);
+		$('.contact_form').on('submit', this.saveContact);
+		$('.contacts_list').on('click', 'button.delete', this.deleteContact);
+		$('.contacts_list').on('click', 'button.edit', this.displayEditContactForm);
 	},
 
 	updateSelectedTags() {
@@ -91,10 +94,45 @@ App = {
 		}
 	},
 
+	displayNewContactForm() {
+		$('.contact_form h2').text('Create New Contact');
+		$('button#update').hide().removeClass('update-active');
+		$('button#create').show();
+		this.displayContactForm();
+	},
+
+	displayEditContactForm(event) {
+		const $updateButton = $('button#update');
+		const id = event.target.dataset.id;
+		$('.contact_form h2').text('Edit Contact');
+		$('button#create').hide();
+		$updateButton.show().addClass('update-active');
+
+		this.attachIdToButton(id, $updateButton);
+		this.displayContactForm();		
+		this.fillOutForm(+id);
+	},
+
+	attachIdToButton(id, $button) {
+		$button[0].dataset.id = id;
+	},
+
+	fillOutForm(id) {
+		const data = Contacts.getContactById(id);
+		const tags = data.tags.split(',');
+		const form = document.querySelector('.contact_form');
+		form.full_name.value 		= data.full_name;
+		form.email.value 				= data.email;
+		form.phone_number.value = data.phone_number;
+		tags.forEach(tag => {
+			$(form).find(`[value=${tag}]`).prop('checked', true);
+		});
+	},
+
 	displayContactForm() {
 		$('.contacts_list, .menu').hide();		
 		$('.contact_form').fadeIn();
-		$('.contact_form [type=checkbox]').prop('checked', false);
+		$('.contact_form')[0].reset();
 		$('.contact_form [value=not-tagged]').closest('li').remove();
 	},
 
@@ -116,22 +154,48 @@ App = {
 		$elem.find('small').html('');
 	},
 
-	hideContactForm(event) {
-		event.preventDefault();
+	hideContactForm() {
 		this.resetInvalidityPrompts();
 		$('.contact_form').hide();
-		$('.contacts_list, .menu').fadeIn();	
+		$('.contacts_list, .menu').fadeIn();
 	},
 
-	saveNewContact(event) {
+	saveContact(event) {
 		event.preventDefault();
 		const form = event.target;
+		const isUpdate = $('button#update').hasClass('update-active');
 		const data = this.formatFormData(form);
 
-		if (form.checkValidity()) $.post(CONTACTS_PATH, data, 'json');
-		Contacts.reload().then(() => Template.renderContacts(Contacts.all));
+		if(isUpdate) this.updateContact(form, data);
+		if(!isUpdate) this.createNewContact(form, data);
+	},
 
-		this.hideContactForm(event);
+	updateContact(form, data) {
+		const id = $('button#update').data('id');
+		if (form.checkValidity()) {
+			$.ajax({
+				url: API_PATH + '/' + id,
+				method: 'PUT',
+				data: data,
+				dataType: 'json',
+				success: () => this.refreshPage(form),
+			});
+		} else {
+			$('.contact_form input').trigger('blur');
+		}
+	},
+
+	createNewContact(form, data) {
+		if (form.checkValidity()) {
+			$.post(API_PATH, data, () => this.refreshPage(form), 'json');
+		} else {
+			$('.contact_form input').trigger('blur');
+		}
+	},
+
+	refreshPage(form = $('.contact_form')[0]) {
+		this.reloadAndRenderContacts();
+		this.hideContactForm();
 		form.reset();
 	},
 
@@ -146,13 +210,28 @@ App = {
 			tags: selectedTags.join(','),
 		}
 	},
+
+	deleteContact(event) {
+		const $button = $(event.target);
+		const id = $button.data('id');
+		const name = $button.data('name');
+		const isConfirmDelete = confirm(`Are you sure you want to delete "${name}"?`);
+
+		if (isConfirmDelete) {
+			$.ajax({ 
+				url: API_PATH + '/' + id, 
+				method: 'DELETE',
+				success: () => this.reloadAndRenderContacts(),
+			});
+		}
+	},
 }
 
 Contacts = {
 	all: null,
 
 	reload() {
-		return $.get(CONTACTS_PATH, json => this.all = json);
+		return $.get(API_PATH, json => this.all = json);
 	},
 
 	filtered() {
@@ -169,6 +248,10 @@ Contacts = {
 	matchQuery(obj) {
 		const regexStartWithQuery = new RegExp('^' + App.queryInput, 'i');
 		return obj.full_name.match(regexStartWithQuery);
+	},
+
+	getContactById(id) {
+		return this.all.find(obj => obj.id === +id);	
 	},
 },
 
