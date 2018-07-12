@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="/stylesheets/reset.css" />
 	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">  
 	<link rel="stylesheet" href="/stylesheets/main.css" />
-	<script src="/javascripts/debounce.js"></script>
+	<script src="/javascripts/underscore.js"></script>
   <script src="/javascripts/jquery.js"></script>
   <script src="/javascripts/handlebars.js"></script>
   <script src="/javascripts/application.js"></script>  
@@ -16,7 +16,7 @@
 <body>
 	<header class="flex-container">
 		<h1>Contact Manager</h1>
-		<p>Using jQuery and Handlebars</p>
+		<p>Using jQuery, Underscore.js and Handlebars</p>
 	</header>
 
 	<main>
@@ -34,19 +34,27 @@
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
 			<fieldset>
 				<h2>Create Contact</h2>					
-				<dl class="invalid">
+				<dl>
 					<dt><label for="name">Full name:</label></dt>
-					<dd><input id="name" type="text" name="full_name" required/></dd>
+					<dd>
+						<input id="name" type="text" name="full_name" required/><small></small>
+					</dd>
 				</dl>
 
 				<dl>
 					<dt><label for="email">Email address:</label></dt>
-					<dd><input id="email" type="text" name="email" required /></dd>
+					<dd>
+						<input id="email" type="email" name="email" required />
+						<small></small>
+					</dd>
 				</dl>
 
 				<dl>
 					<dt><label for="phone">Telephone number:</label></dt>
-					<dd><input id="phone" type="text" name="phone_number" required /></dd>
+					<dd>
+						<input id="phone" type="tel" name="phone_number" maxlength="15" required />
+						<small></small>
+					</dd>
 				</dl>
 
 				<dl>
@@ -58,7 +66,7 @@
 					<dt></dt>
 					<dd class="submit">
 						<button type="submit">Create</button></li>
-						<button type="button">Cancel</button></li>
+						<button class="cancel">Cancel</button></li>
 					</dd>
 				</dl>
 			</fieldset>
