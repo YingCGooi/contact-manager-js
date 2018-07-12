@@ -50,10 +50,19 @@ App = {
 		this.bindEvents();
 	},
 
+	bindAllMethods() {
+		const properties = Object.getOwnPropertyNames(this);
+		const methods = properties.filter(prop => typeof this[prop] === 'function');
+		_.bindAll(this, methods);
+	},
+
 	bindEvents() {
-		$('ul#toggle_tags').on('change', 'input', this.filterByTags.bind(this));
-		$('#searchbar').on('input', debounce(this.filterByInputName.bind(this), 300));
-		$('#add').on('click', this.displayContactForm.bind(this));
+		this.bindAllMethods();
+		$('ul#toggle_tags').on('change', 'input', this.filterByTags);
+		$('#searchbar').on('input', _.debounce(this.filterByInputName, 300));
+		$('#add').on('click', this.displayContactForm);
+		$('button.cancel').on('click', this.hideContactForm);
+		$('.contact_form').on('blur', 'dd > input', this.validateInputs);
 	},
 
 	updateSelectedTags() {
@@ -84,6 +93,25 @@ App = {
 	displayContactForm() {
 		$('.contacts_list, .menu').hide();		
 		$('.contact_form').fadeIn();
+		$('.contact_form input[type=checkbox]').prop('checked', false);
+	},
+
+	validateInputs(event) {
+		const input = event.target;
+		const isValid = input.checkValidity();
+		const $dl = $(input).closest('dl').removeClass('invalid');
+		const $small = $(input).next();		
+
+		if (isValid) {
+			$small.html('');
+		} else { 
+			$dl.addClass('invalid');
+			$small.html(`*a valid ${input.id} is required`);
+		}
+	},
+
+	hideContactForm() {
+
 	},
 }
 
