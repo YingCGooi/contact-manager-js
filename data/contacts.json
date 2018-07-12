@@ -1,93 +1,37 @@
 [
   {
-    "id": 1,
-    "full_name": "Naveed Fida",
-    "email": "nf@example.com",
-    "phone_number": "12345678901",
-    "tags": "friend"
-  },
-  {
-    "id": 2,
-    "full_name": "Victor Reyes",
-    "email": "vpr@example.com",
-    "phone_number": "09876543210",
-    "tags": "work,friend"
-  },
-  {
-    "id": 3,
-    "full_name": "Pete Hanson",
-    "email": "ph@example.com",
-    "phone_number": "54321098761",
-    "tags": null
-  },
-  {
-    "full_name": "qwe",
-    "phone_number": "qwe",
-    "email": "qwe",
-    "tags": null,
+    "full_name": "Peter Parker",
+    "phone_number": "321654879",
+    "email": "pp@yahoo.com",
+    "tags": "friend",
     "id": 4
   },
   {
-    "full_name": "Hello World",
-    "phone_number": "123456789",
-    "email": "abc@gmail.com",
-    "tags": null,
+    "full_name": "Tony Stark",
+    "phone_number": "5567483892",
+    "email": "starkindustries@gmail.com",
+    "tags": "work,friend",
     "id": 5
   },
   {
-    "full_name": "qwe",
-    "phone_number": "123456",
-    "email": "qwe@qwe",
+    "full_name": "Albert Einstein",
+    "phone_number": "2145876125",
+    "email": "einstein@science.com",
     "tags": "work,friend",
     "id": 6
   },
   {
-    "full_name": "qwe",
-    "phone_number": "qwe123",
-    "email": "qwe@qwe",
-    "tags": "work,friend,family,not-tagged",
+    "full_name": "Michael Faraday",
+    "phone_number": "9517526321",
+    "email": "faraday@gmail.com",
+    "tags": "family",
     "id": 7
   },
   {
-    "full_name": "Hello2",
-    "phone_number": "123456",
-    "email": "hello@abc.com",
-    "tags": "work,friend,family,not-tagged",
+    "full_name": "Thor Odinson",
+    "phone_number": "3",
+    "email": "thor@asgard.com",
+    "tags": "",
     "id": 8
-  },
-  {
-    "full_name": "Hello3",
-    "phone_number": "123456",
-    "email": "abc@aml",
-    "tags": "work,friend,family,not-tagged",
-    "id": 9
-  },
-  {
-    "full_name": "Hello4",
-    "phone_number": "123456",
-    "email": "123@amj",
-    "tags": "work,friend,family,not-tagged",
-    "id": 10
-  },
-  {
-    "full_name": "ABC",
-    "phone_number": "1234567",
-    "email": "abc@abc",
-    "tags": "friend,family",
-    "id": 11
-  },
-  {
-    "full_name": "ABC",
-    "phone_number": "123456",
-    "email": "abc@abc.com",
-    "tags": "work,friend",
-    "id": 12
-  },
-  {
-    "full_name": "ABC",
-    "phone_number": "1346798",
-    "email": "abc@123",
-    "tags": "family",
-    "id": 13
   }
 ]
