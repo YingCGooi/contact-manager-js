@@ -106,7 +106,7 @@ header p {
 }
 
 .contacts_list li {
-	margin-bottom: 20px;
+	margin-bottom: 30px;
 	width: 160px;
 }
 
@@ -172,7 +172,7 @@ strong {
 	margin-right: 30px;
 }
 
-.contact_form input[type=text] {
+.contact_form dd > input {
 	padding: 5px;
 	width: 100%;
 	font-size: 18px;
@@ -197,9 +197,14 @@ strong {
 	color: #D85D5D;
 }
 
-.invalid input[type=text] {
+.invalid dd > input {
 	border: 1px solid #D85D5D;
-};
+}
+
+.invalid small {
+	font-size: 14px;
+	color: #D85D5D;
+}
 /*============
 		Footer 
 ============*/
