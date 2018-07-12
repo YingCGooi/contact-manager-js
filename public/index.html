@@ -16,7 +16,7 @@
 <body>
 	<header class="flex-container">
 		<h1>Contact Manager</h1>
-		<p>Using jQuery, Underscore.js and Handlebars</p>
+		<p>Using jQuery, Handlebars and Flexbox</p>
 	</header>
 
 	<main>
@@ -35,7 +35,7 @@
 
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
 			<fieldset>
-				<h2><!-- Add or edit new contact --></h2>
+				<h2><!-- Add or update contact --></h2>
 				<dl>
 					<dt><label for="name">Full name:</label></dt>
 					<dd>
@@ -65,7 +65,7 @@
 				</dl>
 
 				<dl>
-					<dt></dt>
+					<dt class="placeholder"></dt>
 					<dd class="submit">
 						<button id="update" data-id="" type="submit">Update</button>
 						<button id="create" type="submit">Create</button>
