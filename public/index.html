@@ -25,7 +25,7 @@
 			<input id="searchbar" type="text" placeholder="&#128269 search by name" />
 			<div class="wrap">
 				<span>Filter by:</span>
-				<ul id="toggle_tags"></ul>
+				<ul id="filter_tags"></ul>
 			</div>
 		</section>
 
@@ -34,45 +34,7 @@
 		</section>
 
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
-			<fieldset>
-				<h2><!-- Add or update contact --></h2>
-				<dl>
-					<dt><label for="name">Full name:</label></dt>
-					<dd>
-						<input id="name" type="text" name="full_name" required/><small></small>
-					</dd>
-				</dl>
-
-				<dl>
-					<dt><label for="email">Email address:</label></dt>
-					<dd>
-						<input id="email" type="email" name="email" required />
-						<small></small>
-					</dd>
-				</dl>
-
-				<dl>
-					<dt><label for="phone">Telephone number:</label></dt>
-					<dd>
-						<input id="phone" type="tel" name="phone_number" maxlength="15" required />
-						<small></small>
-					</dd>
-				</dl>
-
-				<dl class="tags">
-					<dt>Select Tags:</dt>
-					<dd><ul id="input_tags"></ul></dd>
-				</dl>
-
-				<dl>
-					<dt class="placeholder"></dt>
-					<dd class="submit">
-						<button id="update" data-id="" type="submit">Update</button>
-						<button id="create" type="submit">Create</button>
-						<button type="button" class="cancel">Cancel</button>
-					</dd>
-				</dl>
-			</fieldset>
+			<fieldset></fieldset>
 		</form>
 	</main>
 
@@ -81,7 +43,7 @@
 		<small>By Ying Chyi Gooi</small>
 	</footer>
 
-	<script id="tag_fields" class="partial" type="text/x-handlebars">
+	<script id="tagFields" class="partial" type="text/x-handlebars">
 		{{#each fields}}
 		<li>
 			<label>
@@ -116,14 +78,57 @@
 		{{/each}}
 	</script>
 
-	<script id="no_contacts" type="text/x-handlebars">
+	<script id="noContacts" type="text/x-handlebars">
 		<li class="message">
 			{{#if query}}
-			<p>There are no contacts with the selected tags starting with <strong>{{query}}</strong>.</p>
+			<p>No contacts found starting with <strong>"{{query}}"</strong> with the selected tags.</p>
 			{{else}}
 			<p>No contacts found with the selected tags.</p>
 			{{/if}}
 		</li>
+	</script>
+
+	<script id="formContents" type="text/x-handlebars">
+		<h2>{{title}}</h2>
+		<dl>
+			<dt><label for="name">Full name:</label></dt>
+			<dd>
+				<input id="name" type="text" name="full_name" value="{{full_name}}" required/><small></small>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="email">Email address:</label></dt>
+			<dd>
+				<input id="email" type="email" name="email" value="{{email}}" required />
+				<small></small>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt><label for="phone">Telephone number:</label></dt>
+			<dd>
+				<input id="phone" type="tel" name="phone_number" maxlength="15" value="{{phone_number}}" required />
+				<small></small>
+			</dd>
+		</dl>
+
+		<dl class="tags">
+			<dt>Select Tags:</dt>
+			<dd>
+				<ul id="form_tags">
+					<li><button>Add new tag</button></li>
+				</ul>
+			</dd>
+		</dl>
+
+		<dl>
+			<dt class="placeholder"></dt>
+			<dd class="submit">
+				<button id="{{action}}" data-id="{{id}}" type="submit">{{action}}</button>
+				<button type="button" class="cancel">Cancel</button>
+			</dd>
+		</dl>
 	</script>
 </body>
 

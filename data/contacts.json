@@ -7,13 +7,6 @@
     "id": 4
   },
   {
-    "full_name": "Tony Stark",
-    "phone_number": "5567483892",
-    "email": "starkindustries@gmail.com",
-    "tags": "work,friend",
-    "id": 5
-  },
-  {
     "full_name": "Albert Einstein",
     "phone_number": "2145876125",
     "email": "einstein@science.com",
@@ -21,10 +14,10 @@
     "id": 6
   },
   {
-    "full_name": "Michael Faraday",
-    "phone_number": "9517526321",
-    "email": "faraday@gmail.com",
-    "tags": "family",
+    "full_name": "Nick Fury",
+    "phone_number": "1232435345456",
+    "email": "nf@yahoo.com",
+    "tags": "friend",
     "id": 7
   },
   {
