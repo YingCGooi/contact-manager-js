@@ -109,12 +109,12 @@ div.wrap {
 	flex: 2;
 	text-align: right;
 	color: #444;
-	font-weight: 300;
-	font-size: 18px;
+	font-weight: bold;
+	font-size: 22px;
 }
 
-.menu #toggle_tags {
-	flex: 4.8;
+.menu #filter_tags {
+	flex: 4.7;
 }
 
 .menu label {
@@ -281,9 +281,9 @@ div.upper-border {
 	padding-top: 15px;
 }
 
-/*================
+/*==================
 		Media Queries 
-================*/
+==================*/
 @media screen and (min-width: 480px) {
 	.contacts_list li {
 		width: 50%;
@@ -306,7 +306,11 @@ div.upper-border {
 
 	.contacts_list li {
 		width: 33%;
-	}	
+	}
+
+	.menu span {
+		font-size: 18px;
+	}
 
 	div.wrap {
 		margin: 0;
