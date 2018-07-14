@@ -1,11 +1,16 @@
-_ = {
-	debounce(func, delay) {
-		let timeout;
+_ = function(array) {
+	return {
+		without(...values) {
+			return array.filter(value => !values.includes(value));
+		},
+	}
+}
 
-		return function() {
-			const args = arguments;			
-			if (timeout) clearTimeout(timeout);
-			timeout = setTimeout(() => func(...arguments), delay);
-		};
-	},
+_.debounce = (func, delay) => {
+	let timeout;
+
+	return function() {		
+		if (timeout) clearTimeout(timeout);
+		timeout = setTimeout(() => func(...arguments), delay);
+	};
 }
