@@ -9,11 +9,12 @@ $(function() {
 const API_PATH = '/api/contacts';
 
 const $form = $('.contact_form');
+const $menu = $('.menu');
+const $contactsListSection = $('.contacts_list');
 const $contactsList = $('.contacts_list ul');
 const $searchbar = $('input#searchbar');
 const $addContactButton = $('button#add');
 const $filterTagsList = $('ul#filter_tags');
-const $formTagsList = $('ul#form_tags');
 
 Template = {
   init() {
@@ -63,11 +64,106 @@ UI = {
     $filterTagsList.find('input:checkbox').prop('checked', true);
   },
 
-  renderForm(formData, tags) {
-    const formHTML = Template.formContents(formData);
-    const tagsHTML = Template.tagFields({ fields: tags });    
-    $form.find('fieldset').html(formHTML);
-    $formTagsList.prepend(tagsHTML);
+  renderForm() {
+    const data = Form.htmlData;
+    const formHTML = Template.formContents(data);
+    const tagsHTML = Template.tagFields({ fields: data.tags });
+    $form.html(formHTML);
+    $('ul#form_tags').prepend(tagsHTML);
+  },
+
+  displayForm() {
+    $menu.hide();
+    $contactsListSection.hide();
+    $form.fadeIn();
+  },
+
+  hideForm() {
+    $form.hide();
+    $contactsListSection.fadeIn();
+    $menu.fadeIn();
+  },
+
+  renderNewTagToForm(newTagName) {
+    const newTagHTML = Template.newFormTag({ tag_name: newTagName });
+    this.findLiContainsValue(newTagName).remove();
+    $('ul#form_tags').append(newTagHTML);
+  },
+
+  findLiContainsValue(newTagName) {
+    return $('ul#form_tags li').filter(function() {
+      return $(this).find('[type=checkbox]').val() === newTagName;
+    });
+  },
+
+  disableAddNewTag() {
+    $('a#add_new_tag').addClass('isDisabled').text('Max allowed tags reached');
+  },
+
+  addInvalidityPrompt($dl) {
+    $dl.addClass('invalid');
+    const fieldName = $dl.find('input').prop('name');
+    const warningText = `Please enter a valid ${fieldName.replace(/\_/g, ' ')}.`
+    $dl.find('small').text(warningText);
+  },
+
+  resetInvalidityPrompts($dl) {
+    $dl.removeClass('invalid');
+    $dl.find('small').text('');
+  },
+}
+
+Form = {
+  init(action) {
+    this.htmlData = null;
+    this.maxAllowedTags = 8;
+    this.maxTagLength = 16;
+    if (action === 'create') this.formatAsCreateNew();
+    if (action === 'update') this.formatAsUpdateExisting();
+    return this;
+  },
+
+  formatAsCreateNew() {
+    this.htmlData = {
+      title: 'Create New Contact',
+      action: 'create',
+      tags: _(Contacts.getAllTags()).without('not-tagged'),
+    }
+  },
+
+  promptNewTagName() {
+    let tagName = prompt('Please enter a new tag name: \n (only letters, numbers and underscores allowed)');
+    if (tagName === null) return null;
+
+    tagName = this.formatTagName(tagName);
+    if (!tagName || tagName.length > this.maxTagLength) return false;
+    return tagName;
+  },
+
+  maxAllowedTagsReached() {
+    return $('ul#form_tags li').length >= this.maxAllowedTags;
+  },
+
+  hasSameTagNames() {
+    return this.newTagNames.some(newTagName => {
+      return Contacts.getAllTags().includes(newTagName);
+    });
+  },
+
+  formatTagName(string) {
+    return string.trim().toLowerCase().replace(/\W/g, '');
+  },
+
+  alertInvalidTagName() {
+    alert(`Tag is empty or more than ${this.maxTagLength} characters!`);
+  },
+
+  send() {
+    const action = this.htmlData.action;
+    const formData = {
+      full_name: 
+    };
+    if (action === 'create') Contacts.createNew();
   },
 }
 
@@ -118,6 +214,10 @@ Contacts = {
     const startWithFirstOrLastName = new RegExp(`^${query}|\\s${query}`, 'i');
     return obj.full_name.match(startWithFirstOrLastName);
   },
+
+  createNew() {
+
+  },
 }
 
 App = {
@@ -135,12 +235,59 @@ App = {
   bindEvents() {
     $filterTagsList.on('change', 'input', this.handleFilterChanged);
     $searchbar.on('input', _.debounce(this.handleFilterChanged, 300));
-    $addContactButton.on('click', this.displayNewContactForm);
+    $addContactButton.on('click', this.handleAddButtonClicked);
+    $form.on('click', 'button#cancel', UI.hideForm);
+    $form.on('click', 'a#add_new_tag', this.handleAddNewTagClicked);
+    $form.on('blur', 'dd > input', this.handleInputOffFocus);
+    $form.on('submit', this.handleFormSubmit);
   },
 
   handleFilterChanged() {
     Contacts.updateFilters();
     UI.renderContactsSection();
+  },
+
+  handleAddButtonClicked() {
+    Form.init('create');
+    UI.renderForm();
+    UI.displayForm();
+    if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();
+  },
+
+  handleAddNewTagClicked(event) {
+    event.preventDefault();
+    if (event.target.className === 'isDisabled') return;
+
+    const newTagName = Form.promptNewTagName();
+
+    if (newTagName) { 
+      UI.renderNewTagToForm(newTagName);
+    } else if (newTagName !== null) {
+      Form.alertInvalidTagName();
+    }
+    if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();
+  },
+
+  handleInputOffFocus(event) {
+    const input = event.target;
+    const $dl = $(input).closest('dl');
+
+    if (input.checkValidity()) {
+      UI.resetInvalidityPrompts($dl);
+    } else {
+      UI.addInvalidityPrompt($dl);
+    }
+  },
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+    const form = $form[0];
+    if (form.checkValidity()) {
+      Form.send(form);
+    } else { 
+      // invoke blur event handler to add invalidity prompts
+      $form.find('input').trigger('blur');       
+    }
   },
 }
 
