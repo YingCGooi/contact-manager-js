@@ -166,6 +166,10 @@ dd {
 	font-weight: 300;	
 }
 
+dd.tags {
+	font-size: 14px;
+}
+
 .contacts_list li.message {
 	padding: 20px;
 	width: 100%;	
