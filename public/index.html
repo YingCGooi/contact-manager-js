@@ -6,140 +6,140 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Contact Manager</title>
   <link rel="stylesheet" href="/stylesheets/reset.css" />
-	<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
-	<link rel="stylesheet" href="/stylesheets/main.css" />
-	<script src="/javascripts/underscore.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheets/main.css" />
+  <script src="/javascripts/underscore.js"></script>
   <script src="/javascripts/jquery.js"></script>
   <script src="/javascripts/handlebars.js"></script>
   <script src="/javascripts/application.js"></script>  
 </head>
 <body>
-	<header class="flex-container">
-		<h1>Contact Manager</h1>
-		<p>Using jQuery, Handlebars and Flexbox</p>
-	</header>
+  <header class="flex-container">
+    <h1>Contact Manager</h1>
+    <p>Using jQuery, Handlebars and Flexbox</p>
+  </header>
 
-	<main>
-		<section class="menu flex-container">
-			<button id="add">Add Contact</button>
-			<input id="searchbar" type="text" placeholder="&#128269 search by name" />
-			<div class="wrap">
-				<span>Filter by:</span>
-				<ul id="filter_tags"></ul>
-			</div>
-		</section>
+  <main>
+    <section class="menu flex-container">
+      <button id="add">Add Contact</button>
+      <input id="searchbar" type="text" placeholder="&#128269 search by name" />
+      <div class="wrap">
+        <span>Filter by:</span>
+        <ul id="filter_tags"></ul>
+      </div>
+    </section>
 
-		<section class="contacts_list">
-			<ul></ul>
-		</section>
+    <section class="contacts_list">
+      <ul></ul>
+    </section>
 
-		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
-		</form>
-	</main>
+    <form class="contact_form" method="post" action="/api/contacts/" novalidate>
+    </form>
+  </main>
 
-	<footer>
-		<div class="upper-border"></div>
-		<small>By Ying Chyi Gooi</small>
-	</footer>
+  <footer>
+    <div class="upper-border"></div>
+    <small>By Ying Chyi Gooi</small>
+  </footer>
 
-	<script id="tagFields" type="text/x-handlebars">
-		{{#each fields}}
-		<li>
-			<label>
-				<input type="checkbox" name="tags" value="{{.}}" />{{.}}
-			</label>
-		</li>
-		{{/each}}
-	</script>
+  <script id="tagFields" type="text/x-handlebars">
+    {{#each fields}}
+    <li>
+      <label>
+        <input type="checkbox" name="tags" value="{{.}}" />{{.}}
+      </label>
+    </li>
+    {{/each}}
+  </script>
 
-	<script id="contacts" type="text/x-handlebars">
-		{{#each contacts}}
-		<li>
-			<h2>{{full_name}}</h2>
-			<dl>
-				<dt>Phone Number</dt>
-				<dd>{{phone_number}}</dd>
+  <script id="contacts" type="text/x-handlebars">
+    {{#each contacts}}
+    <li>
+      <h2>{{full_name}}</h2>
+      <dl>
+        <dt>Phone Number</dt>
+        <dd>{{phone_number}}</dd>
 
-				<dt>Email</dt>
-				<dd>{{email}}</dd>
+        <dt>Email</dt>
+        <dd>{{email}}</dd>
 
-				<dt>Tags</dt>
-				{{#if tags}}
-				<dd>{{tags}}</dd>
-				{{else}}
-				<dd>not tagged</dd>
-				{{/if}}
-			</dl>
+        <dt>Tags</dt>
+        {{#if tags}}
+        <dd class="tags">{{tags}}</dd>
+        {{else}}
+        <dd>not tagged</dd>
+        {{/if}}
+      </dl>
 
-			<button type="button" class="edit" data-id={{id}}>Edit</button>
-			<button type="button" class="delete" data-id={{id}} data-name={{full_name}}>Delete</button>
-		</li>
-		{{/each}}
-	</script>
+      <button type="button" class="edit" data-id={{id}}>Edit</button>
+      <button type="button" class="delete" data-id={{id}} data-name={{full_name}}>Delete</button>
+    </li>
+    {{/each}}
+  </script>
 
-	<script id="noContacts" type="text/x-handlebars">
-		<li class="message">
-			{{#if query}}
-			<p>No contacts found starting with <strong>"{{query}}"</strong> with the selected tags.</p>
-			{{else}}
-			<p>No contacts found with the selected tags.</p>
-			{{/if}}
-		</li>
-	</script>
+  <script id="noContacts" type="text/x-handlebars">
+    <li class="message">
+      {{#if query}}
+      <p>No contacts found starting with <strong>"{{query}}"</strong> with the selected tags.</p>
+      {{else}}
+      <p>No contacts found with the selected tags.</p>
+      {{/if}}
+    </li>
+  </script>
 
-	<script id="formContents" type="text/x-handlebars">
-		<fieldset class="to_validate">
-			<h2>{{title}}</h2>
-			<dl>
-				<dt><label for="name">Full name:</label></dt>
-				<dd>
-					<input id="name" type="text" name="full_name" value="{{full_name}}" placeholder="John Doe" required/><small></small>
-				</dd>
-			</dl>
+  <script id="formContents" type="text/x-handlebars">
+    <fieldset class="to_validate">
+      <h2>{{title}}</h2>
+      <dl>
+        <dt><label for="name">Full name:</label></dt>
+        <dd>
+          <input id="name" type="text" name="full_name" value="{{full_name}}" placeholder="John Doe" required/><small></small>
+        </dd>
+      </dl>
 
-			<dl>
-				<dt><label for="email">Email address:</label></dt>
-				<dd>
-					<input id="email" type="email" name="email" value="{{email}}" placeholder="johndoe@domain.com" required />
-					<small></small>
-				</dd>
-			</dl>
+      <dl>
+        <dt><label for="email">Email address:</label></dt>
+        <dd>
+          <input id="email" type="email" name="email" value="{{email}}" placeholder="johndoe@domain.com" required />
+          <small></small>
+        </dd>
+      </dl>
 
-			<dl>
-				<dt><label for="phone">Telephone number:</label></dt>
-				<dd>
-					<input id="phone" type="tel" name="phone_number" maxlength="15" placeholder="1234567890" value="{{phone_number}}" required />
-					<small></small>
-				</dd>
-			</dl>
-		</fieldset>
+      <dl>
+        <dt><label for="phone">Telephone number:</label></dt>
+        <dd>
+          <input id="phone" type="tel" name="phone_number" maxlength="15" placeholder="1234567890" value="{{phone_number}}" required />
+          <small></small>
+        </dd>
+      </dl>
+    </fieldset>
 
-		<fieldset>
-			<dl class="tags">
-				<dt>Select Tags:</dt>
-				<dd>
-					<ul id="form_tags"></ul>
-					<a id="add_new_tag" href="#">+ add new</a>
-				</dd>
-			</dl>
-		</fieldset>
+    <fieldset>
+      <dl class="tags">
+        <dt>Select Tags:</dt>
+        <dd>
+          <ul id="form_tags"></ul>
+          <a id="add_new_tag" href="#">+ add new</a>
+        </dd>
+      </dl>
+    </fieldset>
 
-		<dl class="submit">
-			<dt class="placeholder"></dt>
-			<dd  class="flex-container">
-				<button id="{{action}}" data-id="{{id}}" type="submit">{{action}}</button>
-				<button id="cancel" type="button">Cancel</button>
-			</dd>
-		</dl>
-	</script>
+    <dl class="submit">
+      <dt class="placeholder"></dt>
+      <dd  class="flex-container">
+        <button id="{{action}}" data-id="{{id}}" type="submit">{{action}}</button>
+        <button id="cancel" type="button">Cancel</button>
+      </dd>
+    </dl>
+  </script>
 
-	<script id="newFormTag" type="text/x-handlebars">
-		<li>
-			<label>
-				<input type="checkbox" name="tags" value={{tag_name}} checked/>{{tag_name}}
-			</label>
-		</li>
-	</script>
+  <script id="newFormTag" type="text/x-handlebars">
+    <li>
+      <label>
+        <input type="checkbox" name="tags" value={{tag_name}} checked/>{{tag_name}}
+      </label>
+    </li>
+  </script>
 </body>
 
 </html>
