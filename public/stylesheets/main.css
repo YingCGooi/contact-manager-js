@@ -23,12 +23,12 @@ button {
 	border-radius: 4px;
 	font-size: 14px;
 	color: #FFF;
-	background: #6A5C9D;
+	background: #7FC7B9;
 }
 
 button:hover {
 	cursor: pointer;
-	background: #8074AB;
+	background: #029A95;
 }
 
 input[type=checkbox] {
@@ -36,13 +36,16 @@ input[type=checkbox] {
 	margin-right: 10px;
 }
 
+input::placeholder {
+	color: #CCC;
+}
 /*============
 		Header 
 ============*/
 header {
 	flex-direction: column;
 	height: 120px;
-	background: #55458F;
+	background: #7FC7B9;
 	color: #FFF;
 }
 
@@ -51,7 +54,9 @@ h1 {
 }
 
 header p {
-	color: #B6AEC2;
+	font-size: 15px;
+	font-weight: bold;
+	color: #028782;
 }
 
 /*============
@@ -60,7 +65,7 @@ header p {
 .menu {
 	position: relative;
 	padding: 30px;
-	background: #EAE8F1;
+	background: #DFF1ED;
 	flex-wrap: wrap;
 	align-items: stretch;
 }
@@ -73,7 +78,7 @@ header p {
 	padding: 10px;
 	width: 100%;
 	font-size: 18px;	
-	border: 1px solid #6A5C9D;
+	border: 1px solid #029A95;
 }
 
 div.wrap {
@@ -147,11 +152,6 @@ div.wrap {
 
 .contacts_list button {
 	width: 46%;
-	background: #7D70A9;
-}
-
-.contacts_list button:hover {
-	background: #A299C2;
 }
 
 dt {
@@ -161,7 +161,7 @@ dt {
 
 dd {
 	margin-top: 3px;
-	color: #666;
+	color: #000;
 	font-size: 18px;
 	font-weight: 300;	
 }
@@ -197,56 +197,74 @@ strong {
 
 .contact_form dl {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-evenly;
-	height: 45px;
-	margin: 10px 0;
+	flex-direction: column;
+	height: 70px;
+	margin: 15px 0;
 }
 
 .contact_form dt {
 	margin: 0;
-	padding-right: 15px;
-	width: 175px;
-	text-align: right;
 	font-size: 18px;
+	text-align: left;
 	font-weight: bold;
+}
+
+.contact_form dd {
+	flex: 1;
+	width: 100%;
 }
 
 dt.placeholder {
 	display: none;
 }
 
-.contact_form dd {
-	flex: 1;
-}
-
 dl.tags {
+	height: auto;
 	margin: 20px 0;
 }
 
 .contact_form dd > input {
-	padding: 5px;
+	padding: 10px;
 	width: 100%;
-	font-size: 18px;
+	font-size: 20px;
 	border: 1px solid #BBB;
 	border-radius: 3px;
 }
 
-#input_tags li {
+#form_tags li {
 	margin: 4px 0;
 }
 
-.submit {
-	display: flex;
-	justify-content: space-between;
+#form_tags label {
+	text-transform: capitalize;
+}
+
+dl.submit {
+	margin: 0;
+	height: 125px;
+}
+
+.submit dd {
+	flex-direction: column;
 }
 
 .submit button {
 	margin: 0;
 	padding: 10px;
-	width: 48%;
+	width: 100%;
+	font-size: 20px;
 	font-weight: bold;
 	text-transform: uppercase;
+}
+
+fieldset:last-of-type {
+	border-top: 1px solid #DDD;
+}
+
+.contact_form dl.invalid {
+	margin-bottom: 24px;	
 }
 
 .invalid label {
@@ -258,8 +276,35 @@ dl.tags {
 }
 
 .invalid small {
+	display: block;
+	height: 0;
+	padding-top: 3px;
 	font-size: 14px;
 	color: #D85D5D;
+}
+
+a#add_new_tag {
+	margin-top: 10px;
+	display: inline-block;
+	color: #7FC7B9;
+	text-decoration: none;
+	text-transform: uppercase;
+	text-align: right;
+	font-size: 16px;
+	font-weight: bold;
+	border-bottom: 1px dashed #7FC7B9;
+}
+
+#add_new_tag:hover {
+	color: #028782;
+	border-bottom: 1px solid #028782;
+}
+
+#add_new_tag.isDisabled {
+	color: #999;
+	cursor: not-allowed;
+	border: none;
+	text-transform: none;
 }
 /*============
 		Footer 
@@ -285,17 +330,35 @@ div.upper-border {
 		Media Queries 
 ==================*/
 @media screen and (min-width: 480px) {
+	.contact_form dl {
+		flex-direction: row;
+		align-items: center;
+		height: 50px;
+		margin: 10px 0;
+	}
+
+	dl.tags {
+		height: auto;
+	}
+
+	.contact_form dt {
+		padding-right: 15px;
+		width: 175px;
+		text-align: right;
+	}
+
 	.contacts_list li {
 		width: 50%;
 	}
 
-	.contact_form dd {
-		margin-right: 30px;
+	.submit dd {
+		flex-direction: row;
 	}
 
-	dt.placeholder {
-		display: block;
-	}	
+	.submit button {	
+		width: 46%;
+		font-size: 16px;
+	}
 }
 
 @media screen and (min-width: 700px) {
@@ -304,18 +367,37 @@ div.upper-border {
 		align-items: center;
 	}
 
+	.menu span {
+		font-size: 18px;
+	}	
+
 	.contacts_list li {
 		width: 33%;
 	}
 
-	.menu span {
-		font-size: 18px;
+	.contact_form dd {
+		margin-right: 30px;
 	}
 
 	div.wrap {
 		margin: 0;
 		width: 200px;
 	}
+
+	.tags dd {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
+		flex-wrap: wrap;
+	}
+
+	dt.placeholder {
+		display: block;
+	}	
+
+	a#add_new_tag {
+		font-size: 18px;
+	}	
 }
 
 @media screen and (min-width: 900px) {
