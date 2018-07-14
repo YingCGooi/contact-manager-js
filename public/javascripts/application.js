@@ -32,7 +32,7 @@ Template = {
 
 UI = {
   init() {
-    this.renderContactsList(Contacts.allData);
+    this.renderContactsList(_.deepClone(Contacts.allData));
     this.renderFilterTags(Contacts.getAllTags());
   },
 
@@ -47,8 +47,14 @@ UI = {
   },
 
   renderContactsList(json) {
-    const contactsHTML = Template.contacts({ contacts: json });
+    const formatted = this.formatTagsForDisplay(json);
+    const contactsHTML = Template.contacts({ contacts: formatted });
     $contactsList.html(contactsHTML);
+  },
+
+  formatTagsForDisplay(json) {
+    json.forEach(obj => obj.tags = obj.tags.split(',').join(', '));
+    return json;
   },
 
   renderNoContactsFound(query) {
@@ -185,7 +191,7 @@ Contacts = {
     this.allData = null;
     this.filterTags = [];
     this.searchQuery = '';
-    return this.getAllData();
+    return this;
   },
 
   getAllData() {
@@ -199,10 +205,11 @@ Contacts = {
 
     this.allData.forEach(obj => {
       obj.tags.split(',').forEach(tag => { 
-        if (!allTags.includes(tag)) allTags.push(tag || 'not-tagged');
+        console.log([obj.tags], [tag]);
+        allTags.push(tag || 'not-tagged');
       });
     });
-    return allTags;
+    return _.uniq(allTags);
   },
 
   updateFilters() {
@@ -212,7 +219,7 @@ Contacts = {
   },  
 
   getFilteredData() {
-    return this.allData.filter(obj => {
+    return _.deepClone(this.allData).filter(obj => {
       return this.hasMatchTags(obj) && this.hasMatchQuery(obj);
     });
   },
@@ -235,7 +242,7 @@ Contacts = {
 
 App = {
   init() {
-    Contacts.init().done(() => UI.init());
+    Contacts.init().getAllData().then(() => UI.init());
     this.bindAllMethods();
     this.bindEvents();
   },
@@ -253,6 +260,7 @@ App = {
     $form.on('click', 'a#add_new_tag', this.handleAddNewTagClicked);
     $form.on('blur', 'dd > input', this.handleInputOffFocus);
     $form.on('submit', this.handleFormSubmit);
+    $contactsList.on('click', 'button.edit', this.handleEditButtonClicked);
   },
 
   handleFilterChanged() {
@@ -266,6 +274,14 @@ App = {
     UI.displayForm();
     if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();
   },
+
+
+  handleEditButtonClicked() {
+    Form.init('update');
+    UI.renderForm();
+    UI.displayForm();
+    if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();    
+  },  
 
   handleAddNewTagClicked(event) {
     event.preventDefault();
@@ -296,12 +312,12 @@ App = {
     event.preventDefault();
 
     if ($form[0].checkValidity()) {
-      Form.send().done(() => {
-        UI.hideForm();
-        Contacts.getAllData().done(() => {
-          Contacts.updateFilters();
-          UI.renderContactsSection();
-        });
+      Form.send().then(() => {
+        return Contacts.getAllData();
+      }).then(() => {
+        UI.hideForm();         
+        Contacts.updateFilters();         
+        UI.renderContactsSection();
       });
     } else { 
       // invoke blur event handler to add invalidity prompts
