@@ -34,7 +34,6 @@
 		</section>
 
 		<form class="contact_form" method="post" action="/api/contacts/" novalidate>
-			<fieldset></fieldset>
 		</form>
 	</main>
 
@@ -43,7 +42,7 @@
 		<small>By Ying Chyi Gooi</small>
 	</footer>
 
-	<script id="tagFields" class="partial" type="text/x-handlebars">
+	<script id="tagFields" type="text/x-handlebars">
 		{{#each fields}}
 		<li>
 			<label>
@@ -89,46 +88,57 @@
 	</script>
 
 	<script id="formContents" type="text/x-handlebars">
-		<h2>{{title}}</h2>
-		<dl>
-			<dt><label for="name">Full name:</label></dt>
-			<dd>
-				<input id="name" type="text" name="full_name" value="{{full_name}}" required/><small></small>
-			</dd>
-		</dl>
+		<fieldset class="to_validate">
+			<h2>{{title}}</h2>
+			<dl>
+				<dt><label for="name">Full name:</label></dt>
+				<dd>
+					<input id="name" type="text" name="full_name" value="{{full_name}}" placeholder="John Doe" required/><small></small>
+				</dd>
+			</dl>
 
-		<dl>
-			<dt><label for="email">Email address:</label></dt>
-			<dd>
-				<input id="email" type="email" name="email" value="{{email}}" required />
-				<small></small>
-			</dd>
-		</dl>
+			<dl>
+				<dt><label for="email">Email address:</label></dt>
+				<dd>
+					<input id="email" type="email" name="email" value="{{email}}" placeholder="johndoe@domain.com" required />
+					<small></small>
+				</dd>
+			</dl>
 
-		<dl>
-			<dt><label for="phone">Telephone number:</label></dt>
-			<dd>
-				<input id="phone" type="tel" name="phone_number" maxlength="15" value="{{phone_number}}" required />
-				<small></small>
-			</dd>
-		</dl>
+			<dl>
+				<dt><label for="phone">Telephone number:</label></dt>
+				<dd>
+					<input id="phone" type="tel" name="phone_number" maxlength="15" placeholder="1234567890" value="{{phone_number}}" required />
+					<small></small>
+				</dd>
+			</dl>
+		</fieldset>
 
-		<dl class="tags">
-			<dt>Select Tags:</dt>
-			<dd>
-				<ul id="form_tags">
-					<li><button>Add new tag</button></li>
-				</ul>
-			</dd>
-		</dl>
+		<fieldset>
+			<dl class="tags">
+				<dt>Select Tags:</dt>
+				<dd>
+					<ul id="form_tags"></ul>
+					<a id="add_new_tag" href="#">+ add new</a>
+				</dd>
+			</dl>
+		</fieldset>
 
-		<dl>
+		<dl class="submit">
 			<dt class="placeholder"></dt>
-			<dd class="submit">
+			<dd  class="flex-container">
 				<button id="{{action}}" data-id="{{id}}" type="submit">{{action}}</button>
-				<button type="button" class="cancel">Cancel</button>
+				<button id="cancel" type="button">Cancel</button>
 			</dd>
 		</dl>
+	</script>
+
+	<script id="newFormTag" type="text/x-handlebars">
+		<li>
+			<label>
+				<input type="checkbox" name="tags" value={{tag_name}} checked/>{{tag_name}}
+			</label>
+		</li>
 	</script>
 </body>
 
