@@ -119,7 +119,7 @@ Form = {
     this.maxAllowedTags = 8;
     this.maxTagLength = 16;
     if (action === 'create') this.formatAsCreateNew();
-    if (action === 'update') this.formatAsUpdateExisting();
+    if (action === 'update') this.formatAsUpdate();
     return this;
   },
 
@@ -158,12 +158,25 @@ Form = {
     alert(`Tag is empty or more than ${this.maxTagLength} characters!`);
   },
 
+  compileFormData() {
+    const form = $form[0];
+    const $checkedInputs = $form.find('input:checked');
+    const selectedTags = $.map($checkedInputs, input => input.value);
+
+    return {
+      full_name: form.full_name.value,
+      email: form.email.value,
+      phone_number: form.phone_number.value,
+      tags: selectedTags.join(','),
+    };    
+  },
+
   send() {
     const action = this.htmlData.action;
-    const formData = {
-      full_name: 
-    };
-    if (action === 'create') Contacts.createNew();
+    const id = this.htmlData.id;
+    const formData = this.compileFormData();
+    if (action === 'create') return Contacts.createNew(formData);
+    if (action === 'update') return Contacts.update(formData, id);
   },
 }
 
@@ -215,8 +228,8 @@ Contacts = {
     return obj.full_name.match(startWithFirstOrLastName);
   },
 
-  createNew() {
-
+  createNew(data) {
+    return $.post(API_PATH, data, 'json');
   },
 }
 
@@ -281,9 +294,15 @@ App = {
 
   handleFormSubmit(event) {
     event.preventDefault();
-    const form = $form[0];
-    if (form.checkValidity()) {
-      Form.send(form);
+
+    if ($form[0].checkValidity()) {
+      Form.send().done(() => {
+        UI.hideForm();
+        Contacts.getAllData().done(() => {
+          Contacts.updateFilters();
+          UI.renderContactsSection();
+        });
+      });
     } else { 
       // invoke blur event handler to add invalidity prompts
       $form.find('input').trigger('blur');       
