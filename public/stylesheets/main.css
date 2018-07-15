@@ -163,6 +163,7 @@ dd {
 	color: #000;
 	font-size: 18px;
 	font-weight: 300;	
+	overflow-wrap: break-word;
 }
 
 dd.tags {
@@ -374,7 +375,7 @@ div.upper-border {
 	#add {
 		margin-bottom: 0;
 	}
-	
+
 	.contacts_list li {
 		width: 33%;
 	}
@@ -467,9 +468,5 @@ div.upper-border {
 @media screen and (min-width: 1600px) {
 	.contacts_list li {
 		width: 20%;
-	}
-
-	.contacts_list ul {
-		max-width: 1200px;
 	}
 }
