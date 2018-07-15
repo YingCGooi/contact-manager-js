@@ -32,7 +32,7 @@ Template = {
 
 UI = {
   init() {
-    this.renderContactsList(_.deepClone(Contacts.allData));
+    this.renderContactsList(Contacts.getAllData());
     this.renderFilterTags(Contacts.getAllTags());
   },
 
@@ -76,6 +76,12 @@ UI = {
     const tagsHTML = Template.tagFields({ fields: data.tags });
     $form.html(formHTML);
     $('ul#form_tags').prepend(tagsHTML);
+
+    if (Form.tagsChecked) {
+      Form.tagsChecked.forEach(tag => {
+        $form.find(`[value="${tag}"]`).prop('checked', true);
+      });
+    }
   },
 
   displayForm() {
@@ -120,21 +126,34 @@ UI = {
 }
 
 Form = {
-  init(action) {
+  init(action, id = null) {
     this.htmlData = null;
+    this.tagsChecked = null;
     this.maxAllowedTags = 8;
     this.maxTagLength = 16;
-    if (action === 'create') this.formatAsCreateNew();
-    if (action === 'update') this.formatAsUpdate();
+    if (action === 'create') this.initDataAsCreateNew();
+    if (action === 'update') this.initDataAsUpdate(id);
     return this;
   },
 
-  formatAsCreateNew() {
+  initDataAsCreateNew() {
+    this.tagsChecked = null;
     this.htmlData = {
       title: 'Create New Contact',
       action: 'create',
       tags: _(Contacts.getAllTags()).without('not-tagged'),
     }
+  },
+
+  initDataAsUpdate(id) {
+    const contactData = Contacts.getContactById(id);
+    this.tagsChecked = contactData.tags.split(',');
+
+    this.htmlData = Object.assign(contactData, {
+      title: 'Edit Contact',
+      action: 'update',
+      tags: _(Contacts.getAllTags()).without('not-tagged'),
+    });
   },
 
   promptNewTagName() {
@@ -179,10 +198,10 @@ Form = {
 
   send() {
     const action = this.htmlData.action;
-    const id = this.htmlData.id;
     const formData = this.compileFormData();
-    if (action === 'create') return Contacts.createNew(formData);
-    if (action === 'update') return Contacts.update(formData, id);
+    if (action === 'create') return Contacts.ajaxCreateNew(formData);
+    const id = this.htmlData.id;    
+    if (action === 'update') return Contacts.ajaxUpdateContact(formData, id);
   },
 }
 
@@ -194,10 +213,39 @@ Contacts = {
     return this;
   },
 
-  getAllData() {
+  ajaxGetAllData() {
     return $.getJSON(API_PATH, json => { 
       this.allData = json;
     });
+  },
+
+  ajaxCreateNew(data) {
+    this.cacheData(data);
+    return $.post(API_PATH, data, 'json');
+  },
+
+  ajaxUpdateContact(data, id) {
+    this.cacheData(data, id);
+    return $.ajax({
+      url: API_PATH + '/' + id,
+      method: 'PUT',
+      data: data,
+      dataType: 'json'
+    });
+  },
+
+  getAllData() {
+    return _.deepClone(this.allData);
+  },
+
+  cacheData(data, id = null) {
+    if (id) { 
+      const contact = this.allData.find(obj => obj.id === id);
+      for (let field in data) contact[field] = data[field];
+    } else {
+      data.id = this.generateId();
+      this.allData.push(data);      
+    }
   },
 
   getAllTags() {
@@ -205,7 +253,6 @@ Contacts = {
 
     this.allData.forEach(obj => {
       obj.tags.split(',').forEach(tag => { 
-        console.log([obj.tags], [tag]);
         allTags.push(tag || 'not-tagged');
       });
     });
@@ -219,7 +266,7 @@ Contacts = {
   },  
 
   getFilteredData() {
-    return _.deepClone(this.allData).filter(obj => {
+    return this.getAllData().filter(obj => {
       return this.hasMatchTags(obj) && this.hasMatchQuery(obj);
     });
   },
@@ -235,14 +282,22 @@ Contacts = {
     return obj.full_name.match(startWithFirstOrLastName);
   },
 
-  createNew(data) {
-    return $.post(API_PATH, data, 'json');
+  generateId() {
+    const maxId = this.getAllData().reduce((prevMax, obj) => {
+      return obj.id > prevMax ? obj.id : prevMax;
+    }, 0);
+
+    return maxId + 1;
   },
+
+  getContactById(id) {
+    return this.getAllData().find(obj => obj.id === +id);  
+  },  
 }
 
 App = {
   init() {
-    Contacts.init().getAllData().then(() => UI.init());
+    Contacts.init().ajaxGetAllData().then(() => UI.init());
     this.bindAllMethods();
     this.bindEvents();
   },
@@ -275,9 +330,10 @@ App = {
     if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();
   },
 
-
-  handleEditButtonClicked() {
-    Form.init('update');
+  handleEditButtonClicked(event) {
+    const id = event.target.dataset.id;
+    if (!id) return;
+    Form.init('update', id);
     UI.renderForm();
     UI.displayForm();
     if (Form.maxAllowedTagsReached()) UI.disableAddNewTag();    
@@ -313,12 +369,10 @@ App = {
 
     if ($form[0].checkValidity()) {
       Form.send().then(() => {
-        return Contacts.getAllData();
-      }).then(() => {
         UI.hideForm();         
         Contacts.updateFilters();         
         UI.renderContactsSection();
-      });
+      });  
     } else { 
       // invoke blur event handler to add invalidity prompts
       $form.find('input').trigger('blur');       
