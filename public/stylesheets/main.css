@@ -66,12 +66,16 @@ header p {
 	position: relative;
 	padding: 30px;
 	background: #DFF1ED;
-	flex-wrap: wrap;
+	flex-direction: column;
 	align-items: stretch;
 }
 
-.menu > * {
-	margin: 0 10px;
+#add {
+	margin: 0 20px 20px 0;
+}
+
+#searchbar {
+	margin-right: 0;
 }
 
 #add, #searchbar {
@@ -82,15 +86,10 @@ header p {
 }
 
 div.wrap {
-	margin: 20px 0 0 0;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-}
+	float: left;
+	align-self: center;
 
-.wrap > * {
-	margin: 0 10px;
+	margin: 20px 0 0 0;
 }
 
 #add {
@@ -110,22 +109,22 @@ div.wrap {
 	flex: 5;
 }
 
-.menu span {
-	flex: 2;
-	text-align: right;
+#filter_tags {
+	float: left;
+	clear: left;
+}
+
+.menu h2 {
+	float: left;
+	margin-bottom: 10px;
 	color: #444;
 	font-weight: bold;
 	font-size: 22px;
 }
 
-.menu #filter_tags {
-	flex: 4.7;
-}
-
 .menu label {
-	text-transform: capitalize;
-	line-height: 22px;
-	font-size: 16px;
+	line-height: 24px;
+	font-size: 18px;
 }
 /*=================
 		Contact List 
@@ -239,10 +238,6 @@ dl.tags {
 
 #form_tags li {
 	margin: 4px 0;
-}
-
-#form_tags label {
-	text-transform: capitalize;
 }
 
 dl.submit {
@@ -367,6 +362,7 @@ div.upper-border {
 
 @media screen and (min-width: 700px) {
 	.menu {
+		flex-direction: row;		
 		flex-wrap: nowrap;
 		align-items: center;
 	}
@@ -375,6 +371,10 @@ div.upper-border {
 		font-size: 18px;
 	}	
 
+	#add {
+		margin-bottom: 0;
+	}
+	
 	.contacts_list li {
 		width: 33%;
 	}
@@ -384,8 +384,8 @@ div.upper-border {
 	}
 
 	div.wrap {
-		margin: 0;
-		width: 200px;
+		margin: 0 0 0 20px;
+		width: 160px;
 	}
 
 	.tags dd {
@@ -428,8 +428,17 @@ div.upper-border {
 		font-size: 20px;
 	}
 
+	#add {
+		margin-bottom: 10px;
+	}
+
+	div.wrap {
+		margin: 0;
+		width: 100%;
+	}
+
 	.contacts_list {
-		flex: 3;
+		flex: 2;
 	}
 
 	.contact_form {
