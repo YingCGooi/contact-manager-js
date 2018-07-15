@@ -24,7 +24,7 @@
       <button id="add">Add Contact</button>
       <input id="searchbar" type="text" placeholder="&#128269 search by name" />
       <div class="wrap">
-        <h2>Filter by:</h2>
+        <h2>Filter by Tags:</h2>
         <ul id="filter_tags"></ul>
       </div>
     </section>
@@ -71,8 +71,8 @@
         {{/if}}
       </dl>
 
-      <button type="button" class="edit" data-id={{id}}>Edit</button>
-      <button type="button" class="delete" data-id={{id}} data-name={{full_name}}>Delete</button>
+      <button type="button" class="edit" data-id="{{id}}">Edit</button>
+      <button type="button" class="delete" data-id="{{id}}" data-name="{{full_name}}">Delete</button>
     </li>
     {{/each}}
   </script>
@@ -136,7 +136,7 @@
   <script id="newFormTag" type="text/x-handlebars">
     <li>
       <label>
-        <input type="checkbox" name="tags" value={{tag_name}} checked/>{{tag_name}}
+        <input type="checkbox" name="tags" value="{{tag_name}}" checked/>{{tag_name}}
       </label>
     </li>
   </script>
