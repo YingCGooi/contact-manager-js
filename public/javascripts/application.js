@@ -1,10 +1,3 @@
-var Template;
-var UI;
-var App;
-var Events;
-var Form;
-var Contacts;
-
 $(function() {
 const API_PATH = '/api/contacts';
 
@@ -16,7 +9,7 @@ const $searchbar = $('input#searchbar');
 const $addContactButton = $('button#add');
 const $filterTagsList = $('ul#filter_tags');
 
-Template = {
+const Template = {
   init() {
     this.$templateElems = $('script[type*=x-handlebars]');
     this.compileTemplates();
@@ -30,7 +23,7 @@ Template = {
   },
 };
 
-UI = {
+const UI = {
   init() {
     this.renderContactsList(Contacts.getAllData());
     this.renderFilterTags(Contacts.getAllTags());
@@ -129,7 +122,7 @@ UI = {
   },
 }
 
-Form = {
+const Form = {
   init(action, id = null) {
     this.htmlData = null;
     this.tagsChecked = null;
@@ -209,7 +202,7 @@ Form = {
   },
 }
 
-Contacts = {
+const Contacts = {
   init() {
     this.allData = null;
     this.filterTags = [];
@@ -312,7 +305,7 @@ Contacts = {
   },  
 }
 
-App = {
+const App = {
   init() {
     Contacts.init().ajaxGetAllData().then(() => UI.init());
     this.bindAllMethods();
@@ -402,6 +395,7 @@ App = {
     const dataset = event.target.dataset;
     const id = dataset.id;
     const name = dataset.name;
+    if (!id) return;
     const isConfirmDelete = confirm(`Are you sure you want to delete ${name}?`);
 
     if (isConfirmDelete) {
