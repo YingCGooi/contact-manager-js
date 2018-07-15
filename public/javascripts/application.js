@@ -67,6 +67,10 @@ UI = {
     $filterTagsList.html(filterTagsHTML);
     const $notTaggedLi = $('[value="not-tagged"]').closest('li')
     $filterTagsList.append($notTaggedLi);
+    this.checkAllFilterTags();
+  },
+
+  checkAllFilterTags() {
     $filterTagsList.find('input:checkbox').prop('checked', true);
   },
 
@@ -129,8 +133,8 @@ Form = {
   init(action, id = null) {
     this.htmlData = null;
     this.tagsChecked = null;
-    this.maxAllowedTags = 8;
-    this.maxTagLength = 16;
+    this.maxAllowedTags = 10;
+    this.maxTagLength = 20;
     if (action === 'create') this.initDataAsCreateNew();
     if (action === 'update') this.initDataAsUpdate(id);
     return this;
@@ -220,12 +224,12 @@ Contacts = {
   },
 
   ajaxCreateNew(data) {
-    this.cacheData(data);
+    this.addNewContactToCache(data);
     return $.post(API_PATH, data, 'json');
   },
 
   ajaxUpdateContact(data, id) {
-    this.cacheData(data, id);
+    this.updateContactInCache(data, id);
     return $.ajax({
       url: API_PATH + '/' + id,
       method: 'PUT',
@@ -234,24 +238,37 @@ Contacts = {
     });
   },
 
+  ajaxDeleteContact(id) {
+    this.deleteContactInCache(id);
+    return $.ajax({
+      url: API_PATH + '/' + id,
+      method: 'DELETE',
+      dataType: 'json'
+    });
+  },
+
   getAllData() {
     return _.deepClone(this.allData);
   },
 
-  cacheData(data, id = null) {
-    if (id) { 
-      const contact = this.allData.find(obj => obj.id === id);
-      for (let field in data) contact[field] = data[field];
-    } else {
-      data.id = this.generateId();
-      this.allData.push(data);      
-    }
+  addNewContactToCache(data) {
+    data.id = this.generateId();
+    this.allData.push(data);
+  },
+
+  updateContactInCache(data, id) {
+    const contact = this.allData.find(obj => obj.id === +id);
+    for (let field in data) contact[field] = data[field];
+  },
+
+  deleteContactInCache(id) {
+    this.allData = this.allData.filter(obj => obj.id !== +id);    
   },
 
   getAllTags() {
     const allTags = [];
 
-    this.allData.forEach(obj => {
+    this.getAllData().forEach(obj => {
       obj.tags.split(',').forEach(tag => { 
         allTags.push(tag || 'not-tagged');
       });
@@ -316,6 +333,7 @@ App = {
     $form.on('blur', 'dd > input', this.handleInputOffFocus);
     $form.on('submit', this.handleFormSubmit);
     $contactsList.on('click', 'button.edit', this.handleEditButtonClicked);
+    $contactsList.on('click', 'button.delete', this.handleDeleteButtonClicked);
   },
 
   handleFilterChanged() {
@@ -369,13 +387,29 @@ App = {
 
     if ($form[0].checkValidity()) {
       Form.send().then(() => {
-        UI.hideForm();         
-        Contacts.updateFilters();         
+        UI.hideForm();
+        UI.renderFilterTags(Contacts.getAllTags());
+        Contacts.updateFilters();       
         UI.renderContactsSection();
       });  
     } else { 
-      // invoke blur event handler to add invalidity prompts
-      $form.find('input').trigger('blur');       
+      // fire blur event to add invalidity prompts on inputs
+      $form.find('input').trigger('blur');
+    }
+  },
+
+  handleDeleteButtonClicked(event) {
+    const dataset = event.target.dataset;
+    const id = dataset.id;
+    const name = dataset.name;
+    const isConfirmDelete = confirm(`Are you sure you want to delete ${name}?`);
+
+    if (isConfirmDelete) {
+      Contacts.ajaxDeleteContact(id).then(() => {
+        UI.renderFilterTags(Contacts.getAllTags());           
+        Contacts.updateFilters();
+        UI.renderContactsSection();
+      });
     }
   },
 }
