@@ -1,135 +1,44 @@
 [
   {
-    "full_name": "Peter Parker",
-    "phone_number": "321654879",
-    "email": "pp@yahoo.com",
-    "tags": "friend",
-    "id": 4
-  },
-  {
-    "full_name": "Albert Einstein",
-    "phone_number": "2145876125",
-    "email": "einstein@science.com",
-    "tags": "work,friend",
-    "id": 6
-  },
-  {
-    "full_name": "Nick Fury",
-    "phone_number": "1232435345456",
-    "email": "nf@yahoo.com",
-    "tags": "friend",
-    "id": 7
-  },
-  {
-    "full_name": "Thor Odinson",
-    "phone_number": "3",
-    "email": "thor@asgard.com",
-    "tags": "",
-    "id": 8
-  },
-  {
-    "full_name": "Hulk",
-    "phone_number": "515988973",
-    "email": "hulk@live.com",
-    "tags": "work,family",
-    "id": 9
-  },
-  {
-    "full_name": "abc",
-    "phone_number": "1234",
-    "email": "abc@qwre",
-    "tags": "friend",
+    "full_name": "Andreas M. Antonopoulos",
+    "phone_number": "15494378781",
+    "email": "1andreas3batLhQa2FawWjeyjCqyBzypd@donation.com",
+    "tags": "blockchain,friend",
     "id": 10
   },
   {
-    "full_name": "qwe",
-    "phone_number": "12345",
-    "email": "abc@qwerwe",
-    "tags": "helloworld",
+    "full_name": "Vitalik Buterin",
+    "phone_number": "1576543",
+    "email": "vitalik@ethereum.com",
+    "tags": "work,blockchain",
     "id": 11
   },
   {
-    "full_name": "hello",
-    "phone_number": "1345",
-    "email": "123@qweq",
-    "tags": "qqqqqqqqqqqqqqqq",
+    "full_name": "Satoshi Nakamoto",
+    "phone_number": "21000000",
+    "email": "satoshi@btc.com",
+    "tags": "blockchain,inventor",
     "id": 12
   },
   {
-    "full_name": "werwr",
-    "phone_number": "123465",
-    "email": "abc@1213",
-    "tags": "friend,qqqqqqqqqqqqqqqq",
-    "id": 13
-  },
-  {
-    "full_name": "abc@123",
-    "phone_number": "12343",
-    "email": "123@qwe",
-    "tags": "family,helloworld",
+    "full_name": "Da Hongfei",
+    "phone_number": "123456789",
+    "email": "da@neo.org",
+    "tags": "blockchain,inventor,ceo",
     "id": 14
   },
   {
-    "full_name": "qweqe",
-    "phone_number": "1234566",
-    "email": "abc@12321",
-    "tags": "friend",
+    "full_name": "Changpeng Zhao",
+    "phone_number": "fundsaresafu",
+    "email": "cz@binance.com",
+    "tags": "blockchain,ceo",
     "id": 15
   },
   {
-    "full_name": "DONE1",
-    "phone_number": "123456",
-    "email": "1345@123",
-    "tags": "family",
+    "full_name": "Random Contact",
+    "phone_number": "983564721",
+    "email": "random@domain.com",
+    "tags": "friend,ceo",
     "id": 16
-  },
-  {
-    "full_name": "Hello world",
-    "phone_number": "123456789",
-    "email": "abc@12331",
-    "tags": "friend",
-    "id": 17
-  },
-  {
-    "full_name": "HELLOWORLD",
-    "phone_number": "48191",
-    "email": "abc@12314.com",
-    "tags": "family",
-    "id": 18
-  },
-  {
-    "full_name": "HELLOWORLD2",
-    "phone_number": "48191",
-    "email": "abc@12314.com",
-    "tags": "family",
-    "id": 19
-  },
-  {
-    "full_name": "HELLOWORLD3",
-    "phone_number": "119",
-    "email": "abc@13213",
-    "tags": "helloworld",
-    "id": 20
-  },
-  {
-    "full_name": "Hello world 4",
-    "phone_number": "1591",
-    "email": "abc@1323",
-    "tags": "helloworld",
-    "id": 21
-  },
-  {
-    "full_name": "Hello world 5",
-    "phone_number": "159",
-    "email": "abc@HELLOWORLD",
-    "tags": "helloworld",
-    "id": 22
-  },
-  {
-    "full_name": "Hello world 6",
-    "phone_number": "1591",
-    "email": "abc@qwekpk",
-    "tags": "helloworld,qqqqqqqqqqqqqqqq,welldone",
-    "id": 23
   }
 ]
