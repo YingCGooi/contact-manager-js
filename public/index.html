@@ -24,7 +24,7 @@
       <button id="add">Add Contact</button>
       <input id="searchbar" type="text" placeholder="&#128269 search by name" />
       <div class="wrap">
-        <span>Filter by:</span>
+        <h2>Filter by:</h2>
         <ul id="filter_tags"></ul>
       </div>
     </section>
@@ -67,7 +67,7 @@
         {{#if tags}}
         <dd class="tags">{{tags}}</dd>
         {{else}}
-        <dd>not tagged</dd>
+        <dd class="tags">not tagged</dd>
         {{/if}}
       </dl>
 
@@ -119,7 +119,7 @@
         <dt>Select Tags:</dt>
         <dd>
           <ul id="form_tags"></ul>
-          <a id="add_new_tag" href="#">+ add new</a>
+          <a id="add_new_tag" href="">+ add new</a>
         </dd>
       </dl>
     </fieldset>
