@@ -459,10 +459,6 @@ div.upper-border {
   .contacts_list li {
     width: 25%;
   }
-
-  .contacts_list ul {
-    max-width: 1200px;
-  }
 }
 
 @media screen and (min-width: 1600px) {
