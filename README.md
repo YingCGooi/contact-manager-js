@@ -1,5 +1,8 @@
 ## Contact Manager
 A contact manager built with jQuery, Handlebars and Flexbox.
+
+Try it out at: https://contact-manager-js.herokuapp.com/
+
 A customized underscore.js is created with methods implemented to suit the application's usage.
 
 ### Objects
