@@ -3,10 +3,23 @@ A contact manager built with jQuery, Handlebars and Flexbox.
 
 Deployed version: https://contact-manager-js.herokuapp.com/
 
-A customized underscore.js is created with methods implemented to suit the application's usage.
+A customized underscore.js is created that includes methods implemented to suit the application's usage.
+
+### Installation
+To install, clone this repository, `cd` into the root directory of the project and run:
+```
+npm install
+```
+
+To spin up the server, make sure that there are no other servers listening at `localhost:3000` and then run:
+```
+npm start
+```
+
+Navigate to `localhost:3000` to run the application.
 
 ### Server
-The server is built with Node/Express API Server. Navigating to localhost:3000/doc will list all available REST API endpoints. The client `application.js` uses these endpoints to perform CRUD actions. The response data is then used to render the application view in `index.html`.
+The server is built with Node/Express API Server. Navigating to `/doc` will list all available REST API endpoints. The client `application.js` uses these endpoints to perform CRUD actions. The response data is then used to render the application view in `index.html`.
 
 ### Objects
 #### Template
@@ -44,5 +57,4 @@ Responsive breakpoints have been set to:
 - 1200px (laptop)
 - 1600px (laptop, or other bigger screens)
 
-
-
+These breakpoints are used to render different CSS for mobile, tablet and laptop views.
